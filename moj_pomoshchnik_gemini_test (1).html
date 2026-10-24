@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#08152d">
+<title>Мой помощник</title>
+<style>
+:root{--bg:#08152d;--panel:#102442;--panel2:#173154;--line:#27476c;--text:#edf5ff;--muted:#a7bfdc;--blue:#43a5ff;--cyan:#69e0ff;--red:#ff6179;--green:#56dfad;--gold:#ffd16b}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#15345a 0,#08152d 50%,#061020 100%);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Arial,sans-serif;min-height:100vh}button,input,select,textarea{font:inherit}button{cursor:pointer;border:1px solid var(--line);background:#1b3b61;color:var(--text);padding:10px 13px;border-radius:12px}button:hover{border-color:var(--blue)}input,select,textarea{width:100%;background:#091a31;border:1px solid var(--line);border-radius:10px;padding:10px;color:var(--text);margin:4px 0 10px}textarea{min-height:85px;resize:vertical}label{font-size:13px;color:var(--muted)}h1,h2,h3,p{margin-top:0}h1{font-size:24px;margin-bottom:4px}h2{font-size:19px}h3{font-size:15px}.muted{color:var(--muted)}.small{font-size:12px;color:var(--muted)}.wrap{max-width:780px;margin:auto;padding:16px 14px 100px}.top{display:flex;align-items:center;justify-content:space-between;margin:6px 0 18px}.brand{display:flex;align-items:center;gap:10px}.logo{width:43px;height:43px;display:grid;place-items:center;border-radius:14px;background:linear-gradient(135deg,#2785ff,#4dd7f2);font-size:23px;box-shadow:0 5px 24px #1688ff55}.card{background:linear-gradient(145deg,#142c4b,#0d1e37);border:1px solid var(--line);border-radius:18px;padding:15px;margin:12px 0;box-shadow:0 8px 25px #0002}.card.red{border-color:#874456;background:linear-gradient(145deg,#3a2638,#201d32)}.cardhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}.cardhead h2{margin:0}.count{border-radius:99px;background:#613246;color:#ffb9c5;padding:3px 9px;font-weight:700}.item{display:flex;align-items:center;gap:10px;border-top:1px solid #ffffff12;padding:11px 0}.item:first-of-type{border-top:0}.itemmain{flex:1;min-width:0}.itemmain strong{display:block;overflow-wrap:anywhere}.tag{font-size:11px;color:#a8d7ff;background:#1d4165;padding:3px 7px;border-radius:99px;display:inline-block;margin-top:4px}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.primary{background:linear-gradient(120deg,#167cff,#20a8d8);border:0;font-weight:650}.danger{color:#ffb2bf;border-color:#864154;background:#3a2638}.good{color:#8ff0c7}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tile{background:#122b4a;border:1px solid var(--line);padding:13px;border-radius:14px;text-align:left;min-height:76px}.tile strong{display:block;margin:5px 0}.nav{position:fixed;bottom:0;left:0;right:0;z-index:10;background:#08152df2;backdrop-filter:blur(16px);border-top:1px solid #27476c;padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:4px}.nav button{flex:1;max-width:130px;padding:8px 3px;border:0;background:transparent;color:#91a9c7;font-size:11px}.nav button span{display:block;font-size:19px;margin-bottom:2px}.nav button.active{background:#16395f;color:#8fdbff;border-radius:12px}.hidden{display:none!important}.section-title{display:flex;justify-content:space-between;align-items:center;gap:8px}.pill{border:1px solid var(--line);border-radius:99px;padding:5px 9px;color:var(--muted);font-size:12px}.bar{height:8px;border-radius:99px;background:#07162a;overflow:hidden;margin-top:7px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#2b8cff,#57e2d2)}.metric{font-size:25px;font-weight:750}.tabs{display:flex;gap:6px;overflow:auto;margin:12px 0}.tabs button{white-space:nowrap;padding:8px 11px}.tabs button.active{background:#217ad0}.empty{padding:16px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:12px}.notice{background:#102c4b;border-left:3px solid var(--blue);padding:11px;border-radius:9px;color:#c6dcf5}.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.progressrow{display:flex;justify-content:space-between;gap:8px}.check{width:auto;margin:0}.footer-note{margin:18px 0;color:#7f9ab9;font-size:11px;text-align:center}
+@media(min-width:650px){.wrap{padding-top:24px}.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}.card{padding:18px}}
+</style></head>
+<body>
+<div class="wrap">
+<header class="top"><div class="brand"><div class="logo">✦</div><div><h1>Мой помощник</h1><div class="muted" id="todayLabel">Главное · Сегодня</div></div></div><button onclick="go('settings')" aria-label="Настройки">⚙</button></header>
+<main id="app"></main>
+<div class="footer-note">Локальная версия · данные сохраняются в этом браузере</div>
+</div>
+<nav class="nav" id="nav">
+<button data-page="home" onclick="go('home')" class="active"><span>⌂</span>Главная</button>
+<button data-page="thoughts" onclick="go('thoughts')"><span>✧</span>Мысли</button>
+<button data-page="tasks" onclick="go('tasks')"><span>☑</span>Задачи</button>
+<button data-page="health" onclick="go('health')"><span>♡</span>Здоровье</button>
+<button data-page="finance" onclick="go('finance')"><span>▣</span>Финансы</button>
+<button data-page="settings" onclick="go('settings')"><span>⚙</span>Настройки</button>
+</nav>
+<script>
+const KEY='myAssistantFull_v2';
+const today=()=>new Date().toISOString().slice(0,10);
+const uid=()=>Math.random().toString(36).slice(2,10);
+let data;
+try{data=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}
+if(!data||!Array.isArray(data.tasks))data={thoughts:[],tasks:[],payments:[],reminders:[],transactions:[],debts:[],activity:{},settings:{}};
+['thoughts','tasks','payments','reminders','transactions','debts','trackers'].forEach(k=>{if(!Array.isArray(data[k]))data[k]=[]});
+function save(){localStorage.setItem(KEY,JSON.stringify(data));render()}
+function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function money(n){return (Number(n)||0).toLocaleString('ru-RU')+' сум'}
+function dateText(d){if(!d)return 'Дата не указана';return new Date(d+'T12:00:00').toLocaleDateString('ru-RU',{day:'numeric',month:'short'})}
+function dueLabel(d){if(!d)return 'Срок не указан';let diff=Math.round((new Date(d+'T12:00:00')-new Date(today()+'T12:00:00'))/86400000);return diff<0?'Просрочено на '+Math.abs(diff)+' дн.':diff===0?'Сегодня':diff===1?'Завтра':'Осталось '+diff+' дн.'}
+let page='home',finTab='overview',taskFilter='active',selectedThought=null;
+function go(p){page=p;render();window.scrollTo(0,0)}
+function activeTasks(){return data.tasks.filter(t=>!t.done)}
+function activeThoughts(){return data.thoughts.filter(t=>!t.archived)}
+function card(title,body,extra='',cls=''){return `<section class="card ${cls}"><div class="cardhead"><h2>${title}</h2>${extra}</div>${body}</section>`}
+function rowItem(title,sub,buttons='',tag=''){return `<div class="item"><div class="itemmain"><strong>${esc(title)}</strong><div class="small">${esc(sub||'')}</div>${tag?`<span class="tag">${esc(tag)}</span>`:''}</div>${buttons}</div>`}
+function home(){let payments=data.payments.filter(x=>!x.paid).sort((a,b)=>(a.date||'').localeCompare(b.date||''));let ideas=activeThoughts().filter(t=>t.active!==false);let tasks=activeTasks().sort((a,b)=>(a.date||'9999').localeCompare(b.date||'9999')).slice(0,4);let reminders=data.reminders.filter(r=>!r.done&&r.date===today());
+return `<div class="small">ГЛАВНОЕ · ${new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'})}</div>
+${card('🔴 Срочные оплаты',payments.length?payments.map(p=>rowItem(p.title,`${dueLabel(p.date)} · ${money(p.amount)}`,`<button onclick="markPaid('${p.id}')">Оплачено</button>`)).join(''):'<div class="empty">Нет предстоящих оплат</div>',`<span class="count">${payments.length}</span>`,'red')}
+${card('💡 Активные идеи',ideas.length?ideas.map(t=>rowItem(t.title,t.status||'Рабочая идея',`<button onclick="openThought('${t.id}')">Открыть</button>`)).join(''):'<div class="empty">Пока нет активных проектов</div>',`<button onclick="go('thoughts')">Все проекты →</button>`)}
+<div class="actions"><button class="primary" onclick="addThought()">＋ Новая идея</button></div>
+${card('☑ Ближайшие дела',tasks.length?tasks.map(t=>rowItem(t.title,`${dueLabel(t.date)}${t.time?' · '+t.time:''}`,`<button onclick="toggleTask('${t.id}')">✓</button>`,t.priority||'Обычный')).join(''):'<div class="empty">Активных дел нет</div>',`<button onclick="go('tasks')">Все дела →</button>`)}
+${card('🔔 Напоминание на сегодня',reminders.length?reminders.map(r=>rowItem(r.title,'Сегодня',`<button onclick="finishReminder('${r.id}')">Выполнено</button>`)).join(''):'<div class="empty">На сегодня нет разовых напоминаний</div>',`<button onclick="addReminder()">＋ Добавить</button>`)}
+${card('▣ Финансовый обзор',`<div class="row2"><div><div class="small">Доходы за записи</div><div class="metric good">${money(sum('income'))}</div></div><div><div class="small">Расходы за записи</div><div class="metric">${money(sum('expense'))}</div></div></div><div class="actions"><button onclick="go('finance')">Открыть финансы →</button></div>`)}
+`}
+function thoughts(){if(selectedThought){let t=data.thoughts.find(x=>x.id===selectedThought);if(!t){selectedThought=null;return thoughts()}return `<button onclick="selectedThought=null;render()">← Все мысли</button><section class="card"><h2>${esc(t.title)}</h2><div class="muted">${esc(t.text||'')}</div><label>Обсуждение / заметки</label><div class="notice">Здесь пока локальные заметки, настоящий ИИ ещё не подключён.</div><textarea id="thoughtNote" placeholder="Записать вывод или обсудить идею..."></textarea><button class="primary" onclick="addThoughtNote('${t.id}')">Сохранить заметку</button>${(t.notes||[]).map(n=>`<div class="item"><div class="itemmain">${esc(n)}</div></div>`).join('')}<label>Статус проекта</label><select id="thoughtStatus"><option>Рабочая идея</option><option>В процессе</option><option>Пауза</option><option>Завершено</option></select><div class="actions"><button onclick="updateThought('${t.id}')">Сохранить статус</button><button class="danger" onclick="archiveThought('${t.id}')">Убрать с главного</button></div></section>`}
+return `<div class="section-title"><h2>Мысли и проекты</h2><button class="primary" onclick="addThought()">＋ Новая идея</button></div><p class="muted">Идеи хранятся отдельно. В задачи они не переходят автоматически.</p>${activeThoughts().map(t=>`<section class="card">${rowItem(t.title,t.status||'Рабочая идея',`<button onclick="openThought('${t.id}')">Открыть</button>`)}<div class="small">${esc(t.text||'')}</div></section>`).join('')||'<div class="empty">Добавь первую идею</div>'}<h3>Архив</h3>${data.thoughts.filter(t=>t.archived).map(t=>rowItem(t.title,'В архиве',`<button onclick="restoreThought('${t.id}')">Вернуть</button>`)).join('')}`}
+function tasks(){let list=data.tasks.filter(t=>taskFilter==='active'?!t.done:taskFilter==='done'?t.done:true);return `<div class="section-title"><h2>Задачи</h2><button class="primary" onclick="addTask()">＋ Добавить</button></div><input id="taskSearch" placeholder="Поиск по своим задачам..." oninput="filterTaskRows(this.value)"><div class="tabs"><button class="${taskFilter==='active'?'active':''}" onclick="taskFilter='active';render()">Активные</button><button class="${taskFilter==='done'?'active':''}" onclick="taskFilter='done';render()">Выполненные</button><button class="${taskFilter==='all'?'active':''}" onclick="taskFilter='all';render()">Все</button></div><div id="taskRows">${list.map(t=>rowItem(t.title,`${dateText(t.date)} ${t.time||''} · ${t.priority||'Обычный'}`,`<button onclick="toggleTask('${t.id}')">${t.done?'↶':'✓'}</button>`,` ${t.done?'Выполнено':''}`)).join('')||'<div class="empty">Задач пока нет</div>'}</div><div class="notice">Поиск здесь пока работает только по сохранённым задачам. Интернет-поиск и ИИ требуют отдельного подключения.</div>`}
+function filterTaskRows(q){document.querySelectorAll('#taskRows .item').forEach(el=>el.style.display=el.innerText.toLowerCase().includes(q.toLowerCase())?'flex':'none')}
+function health(){let days=Object.keys(data.activity||{}).sort().reverse();return `<h2>Спорт / здоровье</h2><section class="card"><h3>Сегодня · ${dateText(today())}</h3><label><input class="check" type="checkbox" ${data.activity[today()]?.done?'checked':''} onchange="setActivity(this.checked)"> Сегодня была физическая активность</label><label>Заметка (необязательно)</label><input id="activityNote" value="${esc(data.activity[today()]?.note||'')}" placeholder="Например: прогулка 30 минут"><button onclick="saveActivityNote()">Сохранить</button></section>${card('История',days.slice(0,14).map(d=>rowItem(dateText(d),data.activity[d].done?'Активность была':'Без отметки')).join('')||'<div class="empty">Отметок пока нет</div>')}`}
+function sum(type){return data.transactions.filter(t=>t.type===type).reduce((a,t)=>a+Number(t.amount||0),0)}
+function finance(){let bal=sum('income')-sum('expense');let debtTotal=data.debts.reduce((a,d)=>a+Number(d.balance||0),0);return `<h2>Финансы</h2>
+${card('ИИ-помощник по финансам',`<p class="small">Пока тестовый чат. Не вводите банковские пароли, номера карт или другие секретные данные.</p>
+<div id="financeChatLog" style="max-height:260px;overflow:auto;margin:8px 0">
+<div class="notice">Привет! Могу помочь разобраться с бюджетом на основе данных, которые вы укажете в сообщении. На первом этапе я не вижу ваши записи автоматически.</div>
+</div>
+<textarea id="financeChatInput" placeholder="Напишите вопрос, например: как начать учитывать расходы на бензин?"></textarea>
+<div class="actions"><button class="primary" onclick="sendFinanceChat()">Отправить ИИ</button><button onclick="clearFinanceChat()">Очистить чат</button></div>
+<div id="financeChatStatus" class="small" aria-live="polite"></div>`, '')}
+<div class="tabs"><button class="${finTab==='overview'?'active':''}" onclick="finTab='overview';render()">Обзор</button><button class="${finTab==='income'?'active':''}" onclick="finTab='income';render()">Доходы</button><button class="${finTab==='expense'?'active':''}" onclick="finTab='expense';render()">Расходы</button><button class="${finTab==='debts'?'active':''}" onclick="finTab='debts';render()">Долги</button><button class="${finTab==='trackers'?'active':''}" onclick="finTab='trackers';render()">Отдельный учёт</button></div>${finTab==='overview'?`${card('Общий баланс',`<div class="metric">${money(bal)}</div><div class="small">Доходы минус записанные расходы</div><div class="row2"><div><div class="small">Доходы</div><strong class="good">${money(sum('income'))}</strong></div><div><div class="small">Расходы</div><strong>${money(sum('expense'))}</strong></div></div>`)}${card('Обязательства по долгам',`<div class="metric">${money(debtTotal)}</div><div class="small">Сумма текущих остатков, введённых вручную</div><div class="actions"><button onclick="finTab='debts';render()">Управлять долгами →</button></div>`)}${card('Последние операции',data.transactions.slice().reverse().slice(0,6).map(t=>rowItem(t.title,`${dateText(t.date)} · ${t.type==='income'?'Доход':'Расход'}`,`<strong>${t.type==='income'?'+':'−'}${money(t.amount)}</strong>`)).join('')||'<div class="empty">Добавь первую операцию</div>',`<button onclick="addTransaction()">＋ Операция</button>`)}`:finTab==='income'||finTab==='expense'?`${card(finTab==='income'?'Доходы':'Расходы',data.transactions.filter(t=>t.type===finTab).slice().reverse().map(t=>rowItem(t.title,`${dateText(t.date)} · ${t.category||'Без категории'}`,`<strong>${money(t.amount)}</strong>`)).join('')||'<div class="empty">Записей пока нет</div>',`<button class="primary" onclick="addTransaction('${finTab}')">＋ Добавить</button>`)}<div class="notice">Анализ основан только на введённых операциях. Автоматического доступа к банковским счетам нет.</div>`:finTab==='trackers'?`${card('Отдельный учёт расходов',`<p class="muted">Создайте временную категорию для проверки расходов за выбранный период. Например, «Заправка автомобиля» на 3 месяца.</p>${data.trackers.map(t=>{let tx=data.transactions.filter(x=>x.type==='expense'&&x.category===t.title&&x.date>=t.start&&x.date<=t.end);let total=tx.reduce((a,x)=>a+Number(x.amount||0),0);let months=Math.max(1,Math.ceil((new Date(t.end+'T12:00:00')-new Date(t.start+'T12:00:00'))/(86400000*30.4375)));return `<div class="item"><div class="itemmain"><strong>${esc(t.title)}</strong><div class="small">${dateText(t.start)} — ${dateText(t.end)} · ${tx.length} записей</div><div>Итого: <b>${money(total)}</b></div><div class="small">В среднем за месяц: ${money(total/months)}</div></div><button onclick="addTrackedExpense('${t.id}')">＋ Запись</button><button onclick="deleteTracker('${t.id}')">×</button></div>`}).join('')||'<div class="empty">Пока нет отдельных периодов учёта</div>'}`,`<button class="primary" onclick="addTracker()">＋ Новый период учёта</button>`)}<div class="notice">При добавлении записи в этот учёт расход сохраняется в общей истории финансов и одновременно учитывается здесь. Данные остаются на этом устройстве.</div>`:`${card('Кредиты и долги',data.debts.map(d=>`<div class="item"><div class="itemmain"><strong>${esc(d.title)}</strong><div class="small">Остаток: ${money(d.balance)} · Платёж: ${money(d.payment)} · ${dateText(d.date)}</div><div class="bar"><i style="width:${Math.min(100,Math.max(0,Number(d.progress)||0))}%"></i></div><div class="small">Погашено: ${Number(d.progress)||0}%</div></div><button onclick="editDebt('${d.id}')">Изменить</button></div>`).join('')||'<div class="empty">Добавь кредит или долг</div>',`<button class="primary" onclick="addDebt()">＋ Добавить долг</button>`)}<div class="notice">Помощь с планом погашения можно сделать на основе остатков, платежей, дат и твоих доходов. Сейчас автоматические рекомендации ИИ не подключены.</div>`}`}
+function settings(){return `<h2>Настройки и данные</h2>${card('Резервная копия',`<p class="muted">Сохрани все записи в JSON-файл или восстанови их на этом устройстве.</p><div class="actions"><button class="primary" onclick="backup()">Скачать резервную копию</button><button onclick="document.getElementById('restoreFile').click()">Восстановить</button><input class="hidden" id="restoreFile" type="file" accept="application/json" onchange="restore(event)"></div>`)}${card('Состояние функций',`<div class="item"><div class="itemmain"><strong>Локальное сохранение</strong><div class="small">В этом браузере</div></div><span class="good">●</span></div><div class="item"><div class="itemmain"><strong>Настоящий ИИ-чат</strong><div class="small">Не подключён</div></div><span class="pill">Позже</span></div><div class="item"><div class="itemmain"><strong>Интернет-поиск</strong><div class="small">Не подключён</div></div><span class="pill">Позже</span></div><div class="item"><div class="itemmain"><strong>Системные уведомления</strong><div class="small">Не подключены</div></div><span class="pill">Позже</span></div>`)}<div class="actions"><button class="danger" onclick="if(confirm('Удалить все данные этого приложения из данного браузера? Сначала сделай резервную копию.')){localStorage.removeItem(KEY);location.reload()}">Очистить все данные</button></div>`}
+
+const GEMINI_WORKER_URL = "https://moj-pomoshchnik-ai.filippov7230355.workers.dev";
+async function sendFinanceChat(){
+  const input=document.getElementById('financeChatInput');
+  const log=document.getElementById('financeChatLog');
+  const status=document.getElementById('financeChatStatus');
+  if(!input||!log||!status)return;
+  const message=input.value.trim();
+  if(!message)return;
+  const btn=document.querySelector('button[onclick="sendFinanceChat()"]');
+  input.value='';
+  const userLine=document.createElement('div');
+  userLine.className='item';
+  const userText=document.createElement('div');
+  userText.className='itemmain';
+  const userStrong=document.createElement('strong');
+  userStrong.textContent='Вы';
+  const userBody=document.createElement('div');
+  userBody.textContent=message;
+  userText.append(userStrong,userBody); userLine.append(userText); log.append(userLine);
+  status.textContent='Отправляю запрос в Gemini…';
+  if(btn)btn.disabled=true;
+  try{
+    const response=await fetch(GEMINI_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message})
+    });
+    const result=await response.json();
+    if(!response.ok||!result.answer)throw new Error(result.error||('HTTP '+response.status));
+    const aiLine=document.createElement('div'); aiLine.className='item';
+    const aiText=document.createElement('div'); aiText.className='itemmain';
+    const aiStrong=document.createElement('strong'); aiStrong.textContent='Gemini';
+    const aiBody=document.createElement('div'); aiBody.style.whiteSpace='pre-wrap'; aiBody.textContent=result.answer;
+    aiText.append(aiStrong,aiBody); aiLine.append(aiText); log.append(aiLine);
+    status.textContent='Ответ получен.';
+  }catch(err){
+    status.textContent='Не удалось получить ответ: '+(err.message||'ошибка соединения')+'. Проверьте адрес Worker, CORS и настройки Gemini.';
+  }finally{
+    if(btn)btn.disabled=false;
+    log.scrollTop=log.scrollHeight;
+  }
+}
+function clearFinanceChat(){
+  const log=document.getElementById('financeChatLog');
+  if(log)log.innerHTML='<div class="notice">Чат очищен. Задайте новый вопрос.</div>';
+}
+
+function render(){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let el=document.getElementById('app');el.innerHTML=({home,thoughts,tasks,health,finance,settings}[page]||home)()}
+function addThought(){let title=prompt('Название идеи или проекта:');if(!title)return;let text=prompt('Короткое описание (можно пропустить):')||'';data.thoughts.push({id:uid(),title,text,status:'Рабочая идея',active:true,archived:false,notes:[]});save()}
+function openThought(id){selectedThought=id;go('thoughts')}
+function addThoughtNote(id){let t=data.thoughts.find(x=>x.id===id),v=document.getElementById('thoughtNote').value.trim();if(v){t.notes=t.notes||[];t.notes.push(v);save()}}
+function updateThought(id){let t=data.thoughts.find(x=>x.id===id);t.status=document.getElementById('thoughtStatus').value;t.active=t.status!=='Пауза'&&t.status!=='Завершено';if(t.status==='Завершено')t.archived=true;save()}
+function archiveThought(id){let t=data.thoughts.find(x=>x.id===id);t.archived=true;t.active=false;selectedThought=null;save()}
+function restoreThought(id){let t=data.thoughts.find(x=>x.id===id);t.archived=false;t.active=true;save()}
+function addTask(){let title=prompt('Что нужно сделать?');if(!title)return;let date=prompt('Дата YYYY-MM-DD (можно пусто):','')||'';let time=prompt('Время (необязательно):','')||'';let priority=prompt('Приоритет: Срочно / Важно / Обычный','Обычный')||'Обычный';data.tasks.push({id:uid(),title,date,time,priority,done:false});save()}
+function toggleTask(id){let t=data.tasks.find(x=>x.id===id);t.done=!t.done;save()}
+function addReminder(){let title=prompt('Текст напоминания:');if(!title)return;let date=prompt('Дата YYYY-MM-DD:',today())||today();data.reminders.push({id:uid(),title,date,done:false});save()}
+function finishReminder(id){let r=data.reminders.find(x=>x.id===id);r.done=true;save()}
+function addPayment(){let title=prompt('Что оплатить?');if(!title)return;let amount=prompt('Сумма в сумах:','0');let date=prompt('Срок YYYY-MM-DD:',today())||today();data.payments.push({id:uid(),title,amount:Number(amount)||0,date,paid:false});save()}
+function markPaid(id){let p=data.payments.find(x=>x.id===id);p.paid=true;save()}
+function addTransaction(type){type=type||prompt('Тип: income или expense','expense');if(!['income','expense'].includes(type))return;let title=prompt('Название операции:');if(!title)return;let amount=prompt('Сумма в сумах:','0');let category=prompt('Категория (необязательно):','')||'';data.transactions.push({id:uid(),title,amount:Number(amount)||0,category,type,date:today()});save()}
+function addTracker(){let title=prompt('Название отдельного учёта, например «Заправка автомобиля»:');if(!title)return;let months=Number(prompt('На сколько месяцев вести учёт?','3'));if(!Number.isFinite(months)||months<1||months>60)return alert('Укажите от 1 до 60 месяцев');let start=prompt('Дата начала YYYY-MM-DD:',today())||today();let d=new Date(start+'T12:00:00');if(Number.isNaN(d.getTime()))return alert('Проверьте дату');d.setMonth(d.getMonth()+months);let end=d.toISOString().slice(0,10);data.trackers.push({id:uid(),title:title.trim(),start,end,months});save()}
+function addTrackedExpense(id){let t=data.trackers.find(x=>x.id===id);if(!t)return;let amount=prompt('Сумма заправки/расхода в сумах:','0');if(amount===null)return;let date=prompt('Дата YYYY-MM-DD:',today())||today();if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return alert('Проверьте дату');let note=prompt('Комментарий (необязательно):','')||t.title;data.transactions.push({id:uid(),title:note,amount:Number(amount)||0,category:t.title,type:'expense',date});save()}
+function deleteTracker(id){if(!confirm('Удалить только период отдельного учёта? Сами финансовые операции останутся.'))return;data.trackers=data.trackers.filter(t=>t.id!==id);save()}
+function addDebt(){let title=prompt('Название кредита/долга:');if(!title)return;let balance=prompt('Остаток долга в сумах:','0');let payment=prompt('Регулярный платёж в сумах:','0');let date=prompt('Следующая дата платежа YYYY-MM-DD:','')||'';let progress=prompt('Погашено, % (если знаешь):','0');data.debts.push({id:uid(),title,balance:Number(balance)||0,payment:Number(payment)||0,date,progress:Number(progress)||0});save()}
+function editDebt(id){let d=data.debts.find(x=>x.id===id);let b=prompt('Текущий остаток в сумах:',d.balance);if(b===null)return;d.balance=Number(b)||0;let p=prompt('Регулярный платёж в сумах:',d.payment);if(p!==null)d.payment=Number(p)||0;let date=prompt('Следующая дата YYYY-MM-DD:',d.date||'');if(date!==null)d.date=date;let pr=prompt('Погашено, %:',d.progress);if(pr!==null)d.progress=Math.min(100,Math.max(0,Number(pr)||0));save()}
+function setActivity(v){data.activity[today()]=data.activity[today()]||{};data.activity[today()].done=v;save()}
+function saveActivityNote(){data.activity[today()]=data.activity[today()]||{};data.activity[today()].note=document.getElementById('activityNote').value;save()}
+function backup(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='moj-pomoshchnik-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function restore(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let x=JSON.parse(r.result);if(!x||!Array.isArray(x.tasks)||!Array.isArray(x.thoughts))throw Error();data=x;save();alert('Резервная копия восстановлена')}catch(err){alert('Не удалось прочитать резервную копию')}};r.readAsText(f)}
+render();
+</script></body></html>
