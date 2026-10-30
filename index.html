@@ -77,7 +77,8 @@ function thoughts(){
     </div>
 
     <div id="taskRows">
-${list.map(t=>rowItem(t.title,`${dateText(t.date)} ${t.time||''} · ${t.priority||'Обычный'}`,`<button style="flex-shrink:0" onclick="toggleTask('${t.id}')">${t.done?'↶':'✓'}</button><button class="danger" style="flex-shrink:0" onclick="deleteTask('${t.id}')">Удалить</button>`,` ${t.done?'Выполнено':''}`)).join('')||'<div class="empty">Задач пока нет</div>'}
+${list.map(t=>rowItem(t.title,`${dateText(t.date)} ${t.time||''} · ${t.priority||'Обычный'}`,`<button style="flex-shrink:0" onclick="toggleTask('${t.id}')">${t.done?'↶':'✓'}</button><button class="danger" style="flex-shrink:0" onclick="deleteTask('${t.id}')">Удалить</button>`,` ${t.done?'Выполнено':''}`)).join('')||'<div class="empty">Задач пока нет</div>'} 
+</div>
     <div class="card">
       <h3>ИИ-помощник по задачам</h3>
       <div id="taskAiLog" style="max-height:260px;overflow-y:auto;margin:12px 0;"></div>
@@ -192,7 +193,7 @@ async function sendTaskAI(){
     (m.role==='user'?'Пользователь':'ИИ')+': '+m.text
   ).join('\n');
 
- onst promptText=
+ сonst promptText=
     'Ты — личный помощник пользователя. '+
     'Отвечай по-русски, кратко, уважительно и по делу. '+
     'Сегодняшняя дата: '+today()+'. '+
@@ -252,12 +253,7 @@ function clearTaskAI(){
   const status=document.getElementById('taskAiStatus');
   if(log)log.innerHTML='';
   if(status)status.textContent='Чат очищен.';
-}function today(){
-  const d=new Date();
-  const y=d.getFullYear();
-  const m=String(d.getMonth()+1).padStart(2,'0');
-  const day=String(d.getDate()).padStart(2,'0');
-  return `${y}-${m}-${day}`;}
+}
 function render(){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let el=document.getElementById('app');el.innerHTML=({home,thoughts,tasks,health,finance,settings}[page]||home)()}
 function addThought(){let title=prompt('Название идеи или проекта:');if(!title||!title.trim())return;let text=prompt('Коротко опиши идею (можно пропустить):')||'';data.thoughts.push({id:uid(),title:title.trim(),text:text.trim(),status:'Рабочая идея',active:true,archived:false,notes:[],chat:[]});selectedThought=data.thoughts[data.thoughts.length-1].id;go('thoughts')}
 function openThought(id){selectedThought=id;go('thoughts')}
