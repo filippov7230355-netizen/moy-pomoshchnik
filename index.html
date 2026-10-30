@@ -60,8 +60,40 @@ function thoughts(){
   return `<button onclick="selectedThought=null;render()">← Все мысли</button><section class="card"><h2>💡 ${esc(t.title)}</h2><div class="muted">${esc(t.text||'Описание пока не добавлено')}</div><div class="actions"><button onclick="editThought('${t.id}')">Изменить идею</button><button onclick="archiveThought('${t.id}')">В архив</button><button class="danger" onclick="deleteThought('${t.id}')">Удалить навсегда</button></div></section><section class="card"><h3>Обсуди эту идею с ИИ</h3><p class="small">Задавай вопросы, уточняй детали и проси составить пошаговый план. Идея не превращается в задачи автоматически.</p><div id="thoughtChatLog" style="max-height:420px;overflow:auto;margin:8px 0">${messages||'<div class="notice">Начни с вопроса: «Помоги разобраться, как реализовать эту идею».</div>'}</div><label for="thoughtChatInput">Твоё сообщение</label><textarea id="thoughtChatInput" placeholder="Напиши вопрос или уточнение..."></textarea><div class="actions"><button class="primary" id="thoughtSendBtn" onclick="sendThoughtChat('${t.id}')">Отправить ИИ</button></div><div id="thoughtChatStatus" class="small" aria-live="polite"></div></section><section class="card"><h3>Статус идеи</h3><select id="thoughtStatus"><option ${t.status==='Рабочая идея'?'selected':''}>Рабочая идея</option><option ${t.status==='В процессе'?'selected':''}>В процессе</option><option ${t.status==='Пауза'?'selected':''}>Пауза</option><option ${t.status==='Завершено'?'selected':''}>Завершено</option></select><button onclick="updateThought('${t.id}')">Сохранить статус</button></section>`;
  }
  return `<div class="section-title"><h2>Мысли и проекты</h2><button class="primary" onclick="addThought()">＋ Новая идея</button></div><p class="muted">Сохраняй идеи здесь и открывай каждую, чтобы обсуждать её с ИИ. В задачи идеи переходят только по твоему решению.</p>${activeThoughts().map(t=>`<section class="card">${rowItem(t.title,t.status||'Рабочая идея',`<button class="primary" onclick="openThought('${t.id}')">Открыть идею и чат</button>`)}<div class="small">${esc(t.text||'')}</div></section>`).join('')||'<div class="empty">Пока нет идей. Нажми «Новая идея».</div>'}<h3>Архив</h3>${data.thoughts.filter(t=>t.archived).map(t=>rowItem(t.title,'В архиве',`<button onclick="restoreThought('${t.id}')">Вернуть</button><button class="danger" onclick="deleteThought('${t.id}')">Удалить навсегда</button>`)).join('')||'<div class="small">Архив пуст</div>'}`;
+}function tasks(){
+  let list=data.tasks.filter(t=>taskFilter==='active'?!t.done:taskFilter==='done'?t.done:true);
+  return `
+    <div class="section-title">
+      <h2>Задачи</h2>
+      <button class="primary" onclick="addTask()">＋ Добавить</button>
+    </div>
+
+    <input id="taskSearch" placeholder="Поиск по своим задачам..." oninput="filterTaskRows(this.value)">
+
+    <div class="tabs">
+      <button class="${taskFilter==='active'?'active':''}" onclick="taskFilter='active';render()">Активные</button>
+      <button class="${taskFilter==='done'?'active':''}" onclick="taskFilter='done';render()">Выполненные</button>
+      <button class="${taskFilter==='all'?'active':''}" onclick="taskFilter='all';render()">Все</button>
+    </div>
+
+    <div id="taskRows">
+      ${list.map(t=>rowItem(t.title,`${dateText(t.date)} ${t.time||''} · ${t.priority||'Обычный'}`,`<button onclick="toggleTask('${t.id}')">${t.done?'↶':'✓'}</button>`,` ${t.done?'Выполнено':''}`)).join('')||'<div class="empty">Задач пока нет</div>'}
+    </div>
+
+    <div class="card">
+      <h3>ИИ-помощник по задачам</h3>
+      <div id="taskAiLog" style="max-height:260px;overflow-y:auto;margin:12px 0;"></div>
+      <textarea id="taskAiInput" placeholder="Напишите свой вопрос..."></textarea>
+      <div class="actions">
+        <button class="primary" onclick="sendTaskAI()">Отправить</button>
+        <button onclick="clearTaskAI()">Очистить чат</button>
+      </div>
+      <div id="taskAiStatus" class="small" aria-live="polite"></div>
+    </div>
+
+    <div class="notice">Поиск на этой странице работает по сохранённым задачам. ИИ-помощник поможет их разобрать и расставить приоритеты.</div>
+  `;
 }
-function tasks(){let list=data.tasks.filter(t=>taskFilter==='active'?!t.done:taskFilter==='done'?t.done:true);return `<div class="section-title"><h2>Задачи</h2><button class="primary" onclick="addTask()">＋ Добавить</button></div><input id="taskSearch" placeholder="Поиск по своим задачам..." oninput="filterTaskRows(this.value)"><div class="tabs"><button class="${taskFilter==='active'?'active':''}" onclick="taskFilter='active';render()">Активные</button><button class="${taskFilter==='done'?'active':''}" onclick="taskFilter='done';render()">Выполненные</button><button class="${taskFilter==='all'?'active':''}" onclick="taskFilter='all';render()">Все</button></div><div id="taskRows">${list.map(t=>rowItem(t.title,`${dateText(t.date)} ${t.time||''} · ${t.priority||'Обычный'}`,`<button onclick="toggleTask('${t.id}')">${t.done?'↶':'✓'}</button>`,` ${t.done?'Выполнено':''}`)).join('')||'<div class="empty">Задач пока нет</div>'}</div><div class="notice">Поиск здесь пока работает только по сохранённым задачам. Интернет-поиск и ИИ требуют отдельного подключения.</div>`}
 function filterTaskRows(q){document.querySelectorAll('#taskRows .item').forEach(el=>el.style.display=el.innerText.toLowerCase().includes(q.toLowerCase())?'flex':'none')}
 function health(){let days=Object.keys(data.activity||{}).sort().reverse();return `<h2>Спорт / здоровье</h2><section class="card"><h3>Сегодня · ${dateText(today())}</h3><label><input class="check" type="checkbox" ${data.activity[today()]?.done?'checked':''} onchange="setActivity(this.checked)"> Сегодня была физическая активность</label><label>Заметка (необязательно)</label><input id="activityNote" value="${esc(data.activity[today()]?.note||'')}" placeholder="Например: прогулка 30 минут"><button onclick="saveActivityNote()">Сохранить</button></section>${card('История',days.slice(0,14).map(d=>rowItem(dateText(d),data.activity[d].done?'Активность была':'Без отметки')).join('')||'<div class="empty">Отметок пока нет</div>')}`}
 function sum(type){return data.transactions.filter(t=>t.type===type).reduce((a,t)=>a+Number(t.amount||0),0)}
@@ -122,7 +154,102 @@ function clearFinanceChat(){
   const log=document.getElementById('financeChatLog');
   if(log)log.innerHTML='<div class="notice">Чат очищен. Задайте новый вопрос.</div>';
 }
+let taskAIHistory=[];
 
+async function sendTaskAI(){
+  const input=document.getElementById('taskAiInput');
+  const log=document.getElementById('taskAiLog');
+  const status=document.getElementById('taskAiStatus');
+  if(!input||!log||!status)return;
+
+  const message=input.value.trim();
+  if(!message)return;
+
+  const btn=document.querySelector('button[onclick="sendTaskAI()"]');
+  input.value='';
+
+  const userLine=document.createElement('div');
+  userLine.className='item';
+  const userText=document.createElement('div');
+  userText.className='itemmain';
+  const userStrong=document.createElement('strong');
+  userStrong.textContent='Вы';
+  const userBody=document.createElement('div');
+  userBody.textContent=message;
+  userText.append(userStrong,userBody);
+  userLine.append(userText);
+  log.append(userLine);
+
+  taskAIHistory.push({role:'user',text:message});
+
+  const tasksContext=data.tasks.map(t=>
+    (t.done?'Выполнена':'Активна')+
+    ' | '+t.title+
+    ' | Дата: '+(t.date||'не указана')+
+    ' | Время: '+(t.time||'не указано')+
+    ' | Приоритет: '+(t.priority||'Обычный')
+  ).join('\n');
+
+  const history=taskAIHistory.slice(-12).map(m=>
+    (m.role==='user'?'Пользователь':'ИИ')+': '+m.text
+  ).join('\n');
+
+  const promptText=
+    'Ты — личный помощник пользователя. '+
+    'Отвечай по-русски, кратко, уважительно и по делу. '+
+    'Помогай разбирать задачи, определять приоритеты и составлять понятный порядок действий. '+
+    'Не изменяй, не удаляй и не отмечай задачи выполненными самостоятельно. '+
+    'Сначала предлагай решение, а любые изменения оставляй на подтверждение пользователя.\n\n'+
+    'Список задач пользователя:\n'+(tasksContext||'Задач пока нет')+
+    '\n\nИстория диалога:\n'+history+
+    '\nОтветь на последнее сообщение пользователя.';
+
+  status.textContent='Отправляю запрос в Gemini…';
+  if(btn)btn.disabled=true;
+
+  try{
+    const response=await fetch(GEMINI_WORKER_URL,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({message:promptText})
+    });
+
+    const result=await response.json();
+    if(!response.ok||!result.answer)
+      throw new Error(result.error||('HTTP '+response.status));
+
+    taskAIHistory.push({role:'assistant',text:result.answer});
+
+    const aiLine=document.createElement('div');
+    aiLine.className='item';
+    const aiText=document.createElement('div');
+    aiText.className='itemmain';
+    const aiStrong=document.createElement('strong');
+    aiStrong.textContent='Gemini';
+    const aiBody=document.createElement('div');
+    aiBody.style.whiteSpace='pre-wrap';
+    aiBody.textContent=result.answer;
+    aiText.append(aiStrong,aiBody);
+    aiLine.append(aiText);
+    log.append(aiLine);
+
+    status.textContent='Ответ получен.';
+  }catch(err){
+    status.textContent='Не удалось получить ответ: '+
+      (err.message||'ошибка соединения');
+  }finally{
+    if(btn)btn.disabled=false;
+    log.scrollTop=log.scrollHeight;
+  }
+}
+
+function clearTaskAI(){
+  taskAIHistory=[];
+  const log=document.getElementById('taskAiLog');
+  const status=document.getElementById('taskAiStatus');
+  if(log)log.innerHTML='';
+  if(status)status.textContent='Чат очищен.';
+}
 function render(){document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let el=document.getElementById('app');el.innerHTML=({home,thoughts,tasks,health,finance,settings}[page]||home)()}
 function addThought(){let title=prompt('Название идеи или проекта:');if(!title||!title.trim())return;let text=prompt('Коротко опиши идею (можно пропустить):')||'';data.thoughts.push({id:uid(),title:title.trim(),text:text.trim(),status:'Рабочая идея',active:true,archived:false,notes:[],chat:[]});selectedThought=data.thoughts[data.thoughts.length-1].id;go('thoughts')}
 function openThought(id){selectedThought=id;go('thoughts')}
